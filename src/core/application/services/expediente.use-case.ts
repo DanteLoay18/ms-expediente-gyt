@@ -12,7 +12,7 @@ export class ExpedienteUseCase{
             if(!expediente)
                 return {
                     success:false,
-                    message:"El id de la escuela no existe",
+                    message:"El id del expediente no existe",
                     value:{}
                 }
             
@@ -29,32 +29,32 @@ export class ExpedienteUseCase{
     }
 
    
-    async getAllExpedientes(page:number, pageSize:number){
+    async getAllExpedientes(page:number, pageSize:number, dni:string, esEstudiante:boolean){
         try{
-            // let docentes= await this.expedienteService.findAll();
+            let expedientes= await this.expedienteService.findAll();
 
-            // if(idEscuela)
-            // docentes= docentes.filter((docente)=>docente.idEscuela===idEscuela);
+            if(esEstudiante)
+            expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.filter((estudiante)=>estudiante.dni===dni)});
           
-            // const startIndex = (page - 1 )*pageSize;
-            // const endIndex = startIndex + pageSize;
+            const startIndex = (page - 1 )*pageSize;
+            const endIndex = startIndex + pageSize;
 
-            // if(docentes.length === 0 && page !==1){
-            //     const startIndex = (page - 2 )*pageSize;
-            //     const endIndex = startIndex + pageSize;
-            //     return {
-            //         page:page-1,
-            //         pageSize:pageSize,
-            //         items: docentes.slice(startIndex,endIndex),
-            //         total: docentes.length
-            //     }
-            // }
-            // return Paginated.create({
-            //     page,
-            //     pageSize,
-            //     items: docentes.slice(startIndex,endIndex),
-            //     total: docentes.length
-            // });       
+            if(expedientes.length === 0 && page !==1){
+                const startIndex = (page - 2 )*pageSize;
+                const endIndex = startIndex + pageSize;
+                return {
+                    page:page-1,
+                    pageSize:pageSize,
+                    items: expedientes.slice(startIndex,endIndex),
+                    total: expedientes.length
+                }
+            }
+            return Paginated.create({
+                page,
+                pageSize,
+                items: expedientes.slice(startIndex,endIndex),
+                total: expedientes.length
+            });       
 
         }catch(error){
             this.handleExceptions(error)

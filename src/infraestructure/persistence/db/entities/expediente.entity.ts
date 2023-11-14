@@ -21,16 +21,13 @@ export class Expediente extends Base{
     esValido:boolean;
 
     @Prop({type: Array})
-    tesistas?: Estudiante[];
+    estudiantes?: Estudiante[];
 
     @Prop({type: Array})
     jurados?: Jurado[];
 
     @Prop({type: String})
     asesor ?:string;
-
-    @Prop({type: Object})
-    estudiante?: Estudiante;
 
     @Prop({type: Date})
     fechaSustentacion?:Date;

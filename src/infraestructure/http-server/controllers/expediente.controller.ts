@@ -15,9 +15,9 @@ export class ExpedienteController{
 
 
     @MessagePattern({cmd: 'findAll_expedientes'})
-    async findAllDocentes({page, pageSize}:FindAllExpedientesRequest) {
+    async findAllDocentes({page, pageSize, dni,esEstudiante}:FindAllExpedientesRequest) {
 
-        return await this.query.execute(new FindAllExpedientesQuery(page,pageSize));
+        return await this.query.execute(new FindAllExpedientesQuery(page,pageSize,dni,esEstudiante));
         
     }
     

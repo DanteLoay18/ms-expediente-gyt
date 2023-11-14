@@ -6,10 +6,9 @@ export class Expediente extends Base{
     escuela:string;
     facultad:string;
     esValido:boolean;
-    tesistas?: Estudiante[];
+    estudiantes?: Estudiante[];
     jurados?: Jurado[];
     asesor ?:string;
-    estudiante?: Estudiante;
     fechaSustentacion?:Date;
     
 }
