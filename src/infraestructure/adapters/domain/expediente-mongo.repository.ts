@@ -14,7 +14,7 @@ export class MongoExpedienteRepository implements ExpedienteRepository {
         return this.expedienteRepository.find();
     }
 
-    findByTerm(termino:string, valor:string):Promise<Expediente[]>{
+    findByTerm(termino:string, valor:string | number):Promise<Expediente[]>{
         return this.expedienteRepository.find({[termino]:valor})
     }
 
@@ -38,8 +38,8 @@ export class MongoExpedienteRepository implements ExpedienteRepository {
     }
 
     findUltimoExpediente(){
-        return this.expedienteRepository.findOne({
-            order: { numeroExpediente: 'DESC' },
+        return this.expedienteRepository.find({
+            tipo: { $in: [2, 3] }
           });
     }
    

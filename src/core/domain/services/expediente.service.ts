@@ -8,7 +8,7 @@ export class ExpedienteService{
         return this.expedienteRepository.findAll();
     }
 
-    findByterm(termino:string, valor:string){
+    findByterm(termino:string, valor:string | number){
         return this.expedienteRepository.findByTerm(termino, valor);
     }
 
