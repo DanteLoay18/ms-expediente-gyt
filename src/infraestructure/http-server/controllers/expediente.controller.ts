@@ -1,9 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { MessagePattern } from '@nestjs/microservices';
-import { FindByIdQuery } from 'src/core/application/features/read/find-by-id/find-by-id.query';
 import { FindAllExpedientesRequest } from '../model/find-all-expedientes.request';
-import { FindAllExpedientesQuery } from 'src/core/application/features/read/find-all-expedientes/find-all-expedientes.query';
+import { FindAllExpedientesQuery, FindByIdQuery } from 'src/core/application/features/read';
+import { CreateExpedienteRequest } from '../model/create-expediente.request';
+import { CreateExpedienteCommand } from 'src/core/application/features/write';
 @Controller()
 export class ExpedienteController{
 
@@ -36,12 +37,12 @@ export class ExpedienteController{
     }
     
 
-    // @MessagePattern({cmd: 'create_docente'})
-    // async createDocente({idUsuario, ...createDocenteDto}:CreateDocenteRequest) {
+    @MessagePattern({cmd: 'create_expediente'})
+    async createDocente({idUsuario, ...createExpedienteDto}:CreateExpedienteRequest) {
 
-    //     return await this.command.execute(new CreateDocenteCommand(createDocenteDto, idUsuario));
+        return await this.command.execute(new CreateExpedienteCommand(createExpedienteDto, idUsuario));
         
-    // }
+    }
 
     // @MessagePattern({cmd: 'update_docente'})
     // async updateDocente({idUsuario,idDocente, ...updateDocenteDto}:UpdateDocenteRequest) {

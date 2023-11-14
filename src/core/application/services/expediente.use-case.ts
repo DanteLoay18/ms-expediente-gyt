@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable  } from "@nestjs/common";
 import { Paginated } from "../utils/Paginated";
 import { ExpedienteService } from "src/core/domain/services/expediente.service";
+import { CreateExpedienteDto } from "src/core/shared/dtos/create-expediente.dto";
+import { Expediente } from "src/core/domain/entity/expediente.entity";
 @Injectable()
 export class ExpedienteUseCase{
     constructor(private readonly expedienteService:ExpedienteService){}
@@ -94,6 +96,29 @@ export class ExpedienteUseCase{
     //     }
     // }
 
+
+    async createExpediente({tipo,escuela, facultad, numeroExpediente, asesor,estudiantes,fechaSustentacion,jurados}:CreateExpedienteDto, usuarioCreacion:string){
+        let expediente= Expediente.CreateExpedienteEstudiante({tipo,escuela, facultad, numeroExpediente, asesor, estudiantes, fechaSustentacion, jurados}, usuarioCreacion);
+
+
+        if(tipo===2)
+        expediente= Expediente.CreateExpedienteEncargado(tipo,await this.generarNumeroExpediente(), escuela, facultad, estudiantes, usuarioCreacion);
+
+        
+
+        const expedienteCreado = await this.expedienteService.createExpediente(expediente);
+
+        if(!expedienteCreado)
+                return {
+                    success:false,
+                    message:"El docente no se pudo registrar correctamente"
+                }
+
+        return {
+            success:true,
+            message:"El docente se creo correctamente"
+        }
+    }
    
 
     async bloquearDocente(id:string, esBloqueado:boolean){
@@ -116,6 +141,16 @@ export class ExpedienteUseCase{
         //     }
        
     }
+
+    async generarNumeroExpediente() {
+        const ultimoExpediente = await this.expedienteService.findUltimoExpediente();
+    
+        const nuevoNumeroExpediente = ultimoExpediente
+          ? String(Number(ultimoExpediente.numeroExpediente) + 1)
+          : '1';
+    
+        return nuevoNumeroExpediente;
+      }
 
 
     private handleExceptions(error:any){

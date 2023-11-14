@@ -7,6 +7,8 @@ import { Jurado } from './jurado.entity';
 
 @Schema()
 export class Expediente extends Base{
+    @Prop({type: Number})
+    tipo:number;
 
     @Prop({type: String})
     numeroExpediente:string;

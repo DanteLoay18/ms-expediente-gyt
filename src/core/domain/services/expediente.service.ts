@@ -24,6 +24,10 @@ export class ExpedienteService{
         return this.expedienteRepository.updateExpediente(id,expediente);
     }
 
+    findUltimoExpediente(){
+        return this.expedienteRepository.findUltimoExpediente();
+    }
+
     bloquearExpediente(id:string, esBloqueado:boolean){
         return this.expedienteRepository.actualizarBloqueo(id, esBloqueado);
     }

@@ -6,16 +6,16 @@ import { PersistenceModule } from 'src/infraestructure/persistence/persistence.m
 import { ExpedienteService } from './domain/services/expediente.service';
 import { ExpedienteRepository } from './domain/ports/outbound/expediente.repository';
 import { ExpedienteUseCase } from './application/services/expediente.use-case';
-import { FindAllExpedientesQuery } from './application/features/read/find-all-expedientes/find-all-expedientes.query';
-import { FindAllExpedientesHandler } from './application/features/read/find-all-expedientes/find-all-expedientes.handler';
-import { FindByIdHandler } from './application/features/read/find-by-id/find-by-id.handler';
-import { FindByIdQuery } from './application/features/read/find-by-id/find-by-id.query';
+import { FindAllExpedientesHandler, FindAllExpedientesQuery, FindByIdHandler, FindByIdQuery } from './application/features/read';
+import { CreateExpedienteCommand, CreateExpedienteHandler } from './application/features/write';
 
 const EXPEDIENTE_PROVIDERS=[
     FindAllExpedientesQuery,
     FindAllExpedientesHandler,
     FindByIdQuery,
     FindByIdHandler,
+    CreateExpedienteCommand,
+    CreateExpedienteHandler
 ]
 
 const providers = [

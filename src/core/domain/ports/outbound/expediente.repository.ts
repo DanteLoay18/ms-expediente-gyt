@@ -8,5 +8,5 @@ export interface ExpedienteRepository{
     findOneById(id:string):Promise<Expediente>;
     actualizarBloqueo(id:string,esBloqueado:boolean):Promise<Expediente>;
     findByTerm(termino:string, valor:string):Promise<Expediente[]>;
-    
+    findUltimoExpediente():Promise<Expediente>;
 }

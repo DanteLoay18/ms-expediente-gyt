@@ -37,7 +37,11 @@ export class MongoExpedienteRepository implements ExpedienteRepository {
             }, {new:true})
     }
 
-
+    findUltimoExpediente(){
+        return this.expedienteRepository.findOne({
+            order: { numeroExpediente: 'DESC' },
+          });
+    }
    
     
    
