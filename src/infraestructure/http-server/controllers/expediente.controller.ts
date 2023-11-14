@@ -16,9 +16,9 @@ export class ExpedienteController{
 
 
     @MessagePattern({cmd: 'findAll_expedientes'})
-    async findAllDocentes({page, pageSize, dni,esEstudiante}:FindAllExpedientesRequest) {
+    async findAllDocentes({page, pageSize, dni,esEstudiante, idEscuela}:FindAllExpedientesRequest) {
 
-        return await this.query.execute(new FindAllExpedientesQuery(page,pageSize,dni,esEstudiante));
+        return await this.query.execute(new FindAllExpedientesQuery(page,pageSize,dni,esEstudiante,idEscuela));
         
     }
     
@@ -38,9 +38,9 @@ export class ExpedienteController{
     
 
     @MessagePattern({cmd: 'create_expediente'})
-    async createDocente({idUsuario, ...createExpedienteDto}:CreateExpedienteRequest) {
+    async createDocente({idUsuario,esEstudiante,dni, ...createExpedienteDto}:CreateExpedienteRequest) {
 
-        return await this.command.execute(new CreateExpedienteCommand(createExpedienteDto, idUsuario));
+        return await this.command.execute(new CreateExpedienteCommand(createExpedienteDto,esEstudiante,dni, idUsuario));
         
     }
 

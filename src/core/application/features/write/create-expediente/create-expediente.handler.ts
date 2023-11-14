@@ -9,7 +9,7 @@ export class CreateExpedienteHandler implements ICommandHandler<CreateExpediente
 
     async execute(command: CreateExpedienteCommand) {
         
-        return this.expedienteUseCases.createExpediente(command.createExpedienteDto,command.usuarioCreacion);
+        return this.expedienteUseCases.createExpediente(command.createExpedienteDto,command.esEstudiante, command.dni,command.usuarioCreacion);
     }
 
     

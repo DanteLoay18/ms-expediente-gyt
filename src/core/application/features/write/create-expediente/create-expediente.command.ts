@@ -4,6 +4,8 @@ export class CreateExpedienteCommand {
     
     constructor(
                 public readonly createExpedienteDto: CreateExpedienteDto,
+                public readonly esEstudiante:boolean,
+                public readonly dni:string,
                 public readonly usuarioCreacion:string
                 ) { }
     

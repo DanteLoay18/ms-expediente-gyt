@@ -34,10 +34,10 @@ export class ExpedienteUseCase{
     async getAllExpedientes(page:number, pageSize:number, dni:string, esEstudiante:boolean){
         try{
             let expedientes= await this.expedienteService.findAll();
-
+            
             if(esEstudiante)
-            expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.filter((estudiante)=>estudiante.dni===dni)});
-          
+            expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.some((estudiante)=>estudiante.dni===dni)});
+
             const startIndex = (page - 1 )*pageSize;
             const endIndex = startIndex + pageSize;
 
@@ -97,7 +97,7 @@ export class ExpedienteUseCase{
     // }
 
 
-    async createExpediente({tipo,escuela, facultad, numeroExpediente, asesor,estudiantes,fechaSustentacion,jurados}:CreateExpedienteDto, usuarioCreacion:string){
+    async createExpediente({tipo,escuela, facultad, numeroExpediente, asesor,estudiantes,fechaSustentacion,jurados}:CreateExpedienteDto,esEstudiante:boolean, dni:string, usuarioCreacion:string){
         let expediente= Expediente.CreateExpedienteEstudiante({tipo,escuela, facultad, numeroExpediente, asesor, estudiantes, fechaSustentacion, jurados}, usuarioCreacion);
 
         if(tipo===1){
@@ -139,10 +139,18 @@ export class ExpedienteUseCase{
             }
            }
         }
-        
 
-        
+        if(esEstudiante){
+           const estudianteEncontrado= estudiantes.find((estudiante)=>estudiante.dni===dni);
 
+           if(!estudianteEncontrado)
+           return {
+            success:false,
+            message:"No puedes registrar un expediente de otra persona"
+            }
+        }
+        
+        
         const expedienteCreado = await this.expedienteService.createExpediente(expediente);
 
         if(!expedienteCreado)
@@ -193,7 +201,7 @@ export class ExpedienteUseCase{
         expedientes.sort((a, b) => {
             return Number(b.numeroExpediente) - Number(a.numeroExpediente);
         });
-        console.log(expedientes)
+
         const nuevoNumeroExpediente = expedientes[0]
           ? String(Number(expedientes[0].numeroExpediente) + 1)
           : '1';

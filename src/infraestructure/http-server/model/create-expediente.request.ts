@@ -1,5 +1,7 @@
 export class CreateExpedienteRequest{
     idUsuario:string;
+    esEstudiante:boolean;
+    dni:string;
     numeroExpediente:string;
     tipo:number;
     escuela:string;

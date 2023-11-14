@@ -5,4 +5,5 @@ export interface FindAllExpedientesRequest{
     pageSize:number;
     esEstudiante:boolean;
     dni:string;
+    idEscuela:string;
 }
