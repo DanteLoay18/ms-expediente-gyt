@@ -7,7 +7,6 @@ export class FindAllExpedientesQuery {
                 public readonly dni: string,
                 public readonly esEstudiante:boolean,
                 public readonly idEscuela:string
-                //TODO : AGREGAR EL ID ESCUELA
                 ) { }
     
 }

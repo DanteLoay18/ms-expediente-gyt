@@ -31,12 +31,15 @@ export class ExpedienteUseCase{
     }
 
    
-    async getAllExpedientes(page:number, pageSize:number, dni:string, esEstudiante:boolean){
+    async getAllExpedientes(page:number, pageSize:number, dni:string, esEstudiante:boolean, idEscuela:string){
         try{
             let expedientes= await this.expedienteService.findAll();
             
             if(esEstudiante)
             expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.some((estudiante)=>estudiante.dni===dni)});
+
+            if(!esEstudiante)
+            expedientes= expedientes.filter((expediente)=> expediente.escuela===idEscuela)
 
             const startIndex = (page - 1 )*pageSize;
             const endIndex = startIndex + pageSize;
