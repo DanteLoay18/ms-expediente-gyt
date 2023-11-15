@@ -124,6 +124,14 @@ export class ExpedienteUseCase{
             }
            }
 
+           const expedienteEncontradoByNumeroExpediente= await this.findOneByTerm("numeroExpediente", numeroExpediente, "");
+
+           if(expedienteEncontradoByNumeroExpediente){
+            return {
+                success:false,
+                message:"Este numero de expediente ya existe"
+            }
+           }
         }
 
         if(tipo===2 || tipo===3){ 
@@ -178,15 +186,11 @@ export class ExpedienteUseCase{
         }
     }
     
-    async findOneByTerm(term:string, valor:string | number, idExpediente:string, idFacultad:string){
+    async findOneByTerm(term:string, valor:string | number, idExpediente:string,){
         let expedientes= await this.expedienteService.findByterm(term, valor);
-        const expedientesEncontradoPorFacultad= expedientes.find((expediente)=>expediente.facultad===idFacultad && expediente._id!==idExpediente);
+        const expedienteEncontrado= expedientes.find((expediente)=> expediente._id!==idExpediente);
       
-        if(expedientesEncontradoPorFacultad)
-        return {
-                success:false,
-                message:`El ${term} ${valor} ya esta registrado`
-            }
+        return expedienteEncontrado;
        
     }
 

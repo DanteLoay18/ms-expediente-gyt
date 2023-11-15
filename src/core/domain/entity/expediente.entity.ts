@@ -41,7 +41,7 @@ export class Expediente extends Base{
         expediente.estudiantes=estudiantes;
         expediente.fechaCreacion= new Date();
         expediente.usuarioCreacion=usuarioCreacion;
-        expediente.esValido=true;
+        expediente.esValido=false;
         expediente.esEliminado=false;
         expediente.esBloqueado=false;
         return expediente;
