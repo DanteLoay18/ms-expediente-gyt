@@ -3,6 +3,7 @@ import { Paginated } from "../utils/Paginated";
 import { ExpedienteService } from "src/core/domain/services/expediente.service";
 import { CreateExpedienteDto } from "src/core/shared/dtos/create-expediente.dto";
 import { Expediente } from "src/core/domain/entity/expediente.entity";
+import { FindExpedienteByBusquedaDto } from "src/core/shared/dtos/find-by-busqueda.dto";
 @Injectable()
 export class ExpedienteUseCase{
     constructor(private readonly expedienteService:ExpedienteService){}
@@ -68,36 +69,39 @@ export class ExpedienteUseCase{
 
     
 
-    // async getDocentesByBusqueda(findByBusquedaDto:FindByBusquedaDto){
-    //     try{
-    //         let docentes= await this.expedienteService.findAll();
-
-    //         if(findByBusquedaDto.idEscuelaUsuario)
-    //         docentes= docentes.filter((docente)=>docente.idEscuela===findByBusquedaDto.idEscuelaUsuario)
-
-    //         docentes= docentes.filter(docente => {
-    //             const nombreCoincide = !findByBusquedaDto.nombreCompleto || docente.nombreCompleto.toUpperCase().includes(findByBusquedaDto.nombreCompleto.toUpperCase());
+    async getExpedientesByBusqueda({esEstudiante,dni,idEscuelaUsuario,...findExpedienteByBusquedaDto}:FindExpedienteByBusquedaDto){
+        try{
+            let expedientes= await this.expedienteService.findAll();
             
-    //             const email = !findByBusquedaDto.email || docente.email.toUpperCase().includes(findByBusquedaDto.email.toUpperCase());
+            if(esEstudiante)
+            expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.some((estudiante)=>estudiante.dni===dni)});
+
+            if(!esEstudiante)
+            expedientes= expedientes.filter((expediente)=> expediente.escuela===idEscuelaUsuario);
+
+            expedientes= expedientes.filter(expediente => {
+                const tipoConincide = !findExpedienteByBusquedaDto.tipo || expediente.tipo === findExpedienteByBusquedaDto.tipo;
+            
+                const numeroExpedienteCoincide = !findExpedienteByBusquedaDto.numeroExpediente || expediente.numeroExpediente.toUpperCase().includes(findExpedienteByBusquedaDto.numeroExpediente.toUpperCase());
               
-    //             const escuela = !findByBusquedaDto.idEscuela || docente.idEscuela.toUpperCase().includes(findByBusquedaDto.idEscuela.toUpperCase());
+                const escuelaCoincide = !findExpedienteByBusquedaDto.escuela || expediente.escuela.toUpperCase().includes(findExpedienteByBusquedaDto.escuela.toUpperCase());
       
-    //             const facultad = !findByBusquedaDto.idFacultad || docente.idFacultad === findByBusquedaDto.idFacultad;
+                const facultadCoincide = !findExpedienteByBusquedaDto.facultad || expediente.facultad === findExpedienteByBusquedaDto.facultad;
             
-    //             return nombreCoincide && email && escuela && facultad;
-    //           });
+                return tipoConincide && numeroExpedienteCoincide && escuelaCoincide && facultadCoincide;
+              });
 
-    //           return Paginated.create({
-    //             page:findByBusquedaDto.page,
-    //             pageSize:findByBusquedaDto.pageSize,
-    //             items: docentes,
-    //             total: docentes.length
-    //           })
+              return Paginated.create({
+                page:findExpedienteByBusquedaDto.page,
+                pageSize:findExpedienteByBusquedaDto.pageSize,
+                items: expedientes,
+                total: expedientes.length
+              })
 
-    //     }catch(error){
-    //         this.handleExceptions(error)
-    //     }
-    // }
+        }catch(error){
+            this.handleExceptions(error)
+        }
+    }
 
 
     async createExpediente({tipo,escuela, facultad, numeroExpediente, asesor,estudiantes,fechaSustentacion,jurados}:CreateExpedienteDto,esEstudiante:boolean, dni:string, usuarioCreacion:string){

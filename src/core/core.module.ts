@@ -6,7 +6,7 @@ import { PersistenceModule } from 'src/infraestructure/persistence/persistence.m
 import { ExpedienteService } from './domain/services/expediente.service';
 import { ExpedienteRepository } from './domain/ports/outbound/expediente.repository';
 import { ExpedienteUseCase } from './application/services/expediente.use-case';
-import { FindAllExpedientesHandler, FindAllExpedientesQuery, FindByIdHandler, FindByIdQuery } from './application/features/read';
+import { FindAllExpedientesHandler, FindAllExpedientesQuery, FindByIdHandler, FindByIdQuery, FindExpedienteByBusquedaHandler, FindExpedienteByBusquedaQuery } from './application/features/read';
 import { CreateExpedienteCommand, CreateExpedienteHandler } from './application/features/write';
 
 const EXPEDIENTE_PROVIDERS=[
@@ -14,6 +14,8 @@ const EXPEDIENTE_PROVIDERS=[
     FindAllExpedientesHandler,
     FindByIdQuery,
     FindByIdHandler,
+    FindExpedienteByBusquedaQuery,
+    FindExpedienteByBusquedaHandler,
     CreateExpedienteCommand,
     CreateExpedienteHandler
 ]

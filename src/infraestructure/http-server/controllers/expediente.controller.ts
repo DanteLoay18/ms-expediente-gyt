@@ -2,9 +2,10 @@ import { Controller } from '@nestjs/common';
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { MessagePattern } from '@nestjs/microservices';
 import { FindAllExpedientesRequest } from '../model/find-all-expedientes.request';
-import { FindAllExpedientesQuery, FindByIdQuery } from 'src/core/application/features/read';
+import { FindAllExpedientesQuery, FindByIdQuery, FindExpedienteByBusquedaQuery } from 'src/core/application/features/read';
 import { CreateExpedienteRequest } from '../model/create-expediente.request';
 import { CreateExpedienteCommand } from 'src/core/application/features/write';
+import { FindByBusquedaExpedienteRequest } from '../model/find-by-busqueda-expediente.request';
 @Controller()
 export class ExpedienteController{
 
@@ -22,12 +23,12 @@ export class ExpedienteController{
         
     }
     
-    // @MessagePattern({cmd: 'findByBusqueda_docente'})
-    // async findByBusqueda(findByBusquedaRequest:FindByBusquedaRequest) {
+    @MessagePattern({cmd: 'findByBusqueda_expediente'})
+    async findByBusqueda(findByBusquedaExpedienteRequest:FindByBusquedaExpedienteRequest) {
 
-    //     return await this.query.execute(new FindByBusquedaQuery(findByBusquedaRequest));
+        return await this.query.execute(new FindExpedienteByBusquedaQuery(findByBusquedaExpedienteRequest));
         
-    // }
+    }
 
     @MessagePattern({cmd: 'findOne_expediente'})
     async findById(idExpediente:string) {
