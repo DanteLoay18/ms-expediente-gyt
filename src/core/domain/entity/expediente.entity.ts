@@ -46,6 +46,15 @@ export class Expediente extends Base{
         expediente.esBloqueado=false;
         return expediente;
     }
+
+    static EliminarExpediente(usuarioModificacion:string){
+        const expediente= new Expediente();
+
+        expediente.esEliminado=true;
+        expediente.fechaModificacion=new Date();
+        expediente.usuarioModificacion=usuarioModificacion;
+        return expediente;
+    }
     
 }
 

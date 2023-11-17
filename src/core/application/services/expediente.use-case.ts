@@ -11,8 +11,8 @@ export class ExpedienteUseCase{
     async getExpedienteById(id:string){
         try{
             const expediente= await this.expedienteService.findOneById(id);
-
-            if(!expediente)
+     
+            if(!expediente || expediente.esEliminado)
                 return {
                     success:false,
                     message:"El id del expediente no existe",
@@ -180,6 +180,40 @@ export class ExpedienteUseCase{
         }
     }
    
+    async deleteExpediente(idExpediente:string, idUsuario:string){
+        const {success, message, value}= await this.getExpedienteById(idExpediente);
+
+        if(!success){
+            return {
+                success,
+                message
+            }
+        }
+
+        if(value?.['esValido']){
+            return {
+                success: false,
+                message: "No puede eliminar un expediente que es valido"
+            }
+        }
+
+        const expediente = Expediente.EliminarExpediente(idUsuario);
+
+        const expedienteEliminado = await this.expedienteService.updateExpediente(idExpediente, expediente);
+
+        if(!expedienteEliminado){
+            return {
+                success:false,
+                message:"Hubo un error al eliminar el expediente"
+            }
+        }
+
+        return {
+            success:true,
+            message:"El expediente se elimino correctamente"
+        }
+
+    }
 
     async bloquearDocente(id:string, esBloqueado:boolean){
         try {

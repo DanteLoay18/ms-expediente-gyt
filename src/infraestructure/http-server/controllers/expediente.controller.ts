@@ -4,8 +4,9 @@ import { MessagePattern } from '@nestjs/microservices';
 import { FindAllExpedientesRequest } from '../model/find-all-expedientes.request';
 import { FindAllExpedientesQuery, FindByIdQuery, FindExpedienteByBusquedaQuery } from 'src/core/application/features/read';
 import { CreateExpedienteRequest } from '../model/create-expediente.request';
-import { CreateExpedienteCommand } from 'src/core/application/features/write';
+import { CreateExpedienteCommand, EliminarExpedienteCommand } from 'src/core/application/features/write';
 import { FindByBusquedaExpedienteRequest } from '../model/find-by-busqueda-expediente.request';
+import { EliminarExpedienteRequest } from '../model/eliminar-expediente.request';
 @Controller()
 export class ExpedienteController{
 
@@ -53,12 +54,12 @@ export class ExpedienteController{
     // }
 
 
-    // @MessagePattern({cmd: 'modificar_estado_docente'})
-    // async modificarEstadoDocente({idUsuario,idDocente, esInactivo}:ModifciarEstadoRequest) {
+    @MessagePattern({cmd: 'eliminar_expediente'})
+    async modificarEstadoDocente({idUsuario,idExpediente}:EliminarExpedienteRequest) {
 
-    //     return await this.command.execute(new ModificarEstadoCommand(idDocente,esInactivo, idUsuario));
+        return await this.command.execute(new EliminarExpedienteCommand(idExpediente,idUsuario));
         
-    // }
+    }
 
     
 }
