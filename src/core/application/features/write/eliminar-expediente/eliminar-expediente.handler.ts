@@ -9,7 +9,7 @@ export class EliminarExpedienteHandler implements ICommandHandler<EliminarExpedi
 
     async execute(command: EliminarExpedienteCommand) {
         
-        return this.expedienteUseCases.deleteExpediente(command.idExpediente,command.idUsuario);
+        return this.expedienteUseCases.deleteExpediente(command.idExpediente,command.esEstudiante, command.dni,command.idUsuario);
     }
 
     

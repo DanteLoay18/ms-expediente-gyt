@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable  } from "@nestjs/common";
 import { Paginated } from "../utils/Paginated";
 import { ExpedienteService } from "src/core/domain/services/expediente.service";
-import { CreateExpedienteDto } from "src/core/shared/dtos/create-expediente.dto";
+import { CreateExpedienteDto, Estudiante } from "src/core/shared/dtos/create-expediente.dto";
 import { Expediente } from "src/core/domain/entity/expediente.entity";
 import { FindExpedienteByBusquedaDto } from "src/core/shared/dtos/find-by-busqueda.dto";
 @Injectable()
@@ -180,7 +180,7 @@ export class ExpedienteUseCase{
         }
     }
    
-    async deleteExpediente(idExpediente:string, idUsuario:string){
+    async deleteExpediente(idExpediente:string,esEstudiante:boolean, dni:string, idUsuario:string){
         const {success, message, value}= await this.getExpedienteById(idExpediente);
 
         if(!success){
@@ -196,6 +196,16 @@ export class ExpedienteUseCase{
                 message: "No puede eliminar un expediente que es valido"
             }
         }
+
+        if(esEstudiante){
+            const estudianteEncontrado= value?.['estudiantes'].find((estudiante:Estudiante)=>estudiante.dni===dni);
+ 
+            if(!estudianteEncontrado)
+            return {
+             success:false,
+             message:"No puedes eliminar el expediente de otro estudiante"
+             }
+         }
 
         const expediente = Expediente.EliminarExpediente(idUsuario);
 

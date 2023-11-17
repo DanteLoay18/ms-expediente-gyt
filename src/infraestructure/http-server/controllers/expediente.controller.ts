@@ -55,9 +55,9 @@ export class ExpedienteController{
 
 
     @MessagePattern({cmd: 'eliminar_expediente'})
-    async modificarEstadoDocente({idUsuario,idExpediente}:EliminarExpedienteRequest) {
+    async modificarEstadoDocente({idUsuario,esEstudiante, dni,idExpediente}:EliminarExpedienteRequest) {
 
-        return await this.command.execute(new EliminarExpedienteCommand(idExpediente,idUsuario));
+        return await this.command.execute(new EliminarExpedienteCommand(idExpediente,esEstudiante,dni,idUsuario));
         
     }
 
