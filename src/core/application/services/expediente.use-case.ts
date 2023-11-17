@@ -4,6 +4,7 @@ import { ExpedienteService } from "src/core/domain/services/expediente.service";
 import { CreateExpedienteDto, Estudiante } from "src/core/shared/dtos/create-expediente.dto";
 import { Expediente } from "src/core/domain/entity/expediente.entity";
 import { FindExpedienteByBusquedaDto } from "src/core/shared/dtos/find-by-busqueda.dto";
+import { UpdateExpedienteDto } from "src/core/shared/dtos/update-expediente.dto";
 @Injectable()
 export class ExpedienteUseCase{
     constructor(private readonly expedienteService:ExpedienteService){}
@@ -106,6 +107,16 @@ export class ExpedienteUseCase{
 
     async createExpediente({tipo,escuela, facultad, numeroExpediente, asesor,estudiantes,fechaSustentacion,jurados}:CreateExpedienteDto,esEstudiante:boolean, dni:string, usuarioCreacion:string){
         let expediente= Expediente.CreateExpedienteEstudiante({tipo,escuela, facultad, numeroExpediente, asesor, estudiantes, fechaSustentacion, jurados}, usuarioCreacion);
+        
+        if(esEstudiante){
+            const estudianteEncontrado= estudiantes.find((estudiante)=>estudiante.dni===dni);
+ 
+            if(!estudianteEncontrado)
+            return {
+             success:false,
+             message:"No puedes registrar un expediente de otra persona"
+             }
+         }
 
         if(tipo===1){
             if(!numeroExpediente || !asesor || !jurados || !fechaSustentacion){
@@ -155,15 +166,7 @@ export class ExpedienteUseCase{
            }
         }
 
-        if(esEstudiante){
-           const estudianteEncontrado= estudiantes.find((estudiante)=>estudiante.dni===dni);
-
-           if(!estudianteEncontrado)
-           return {
-            success:false,
-            message:"No puedes registrar un expediente de otra persona"
-            }
-        }
+        
         
         
         const expedienteCreado = await this.expedienteService.createExpediente(expediente);
@@ -179,6 +182,102 @@ export class ExpedienteUseCase{
             message:"El expediente se creo correctamente"
         }
     }
+
+    async updateExpediente({idExpediente,tipo,escuela, facultad, numeroExpediente, asesor,estudiantes,fechaSustentacion,jurados }:UpdateExpedienteDto,esEstudiante:boolean, dni:string, usuarioModficiacion:string ){
+        const {success, message, value}= await this.getExpedienteById(idExpediente);
+
+        if(!success){
+            return {
+                success,
+                message
+            }
+        }
+
+        if(value?.['esValido']){
+            return {
+                success: false,
+                message: "No puede eliminar un expediente que fue validado"
+            }
+        }
+
+        if(esEstudiante){
+            const estudianteEncontrado= value?.['estudiantes'].find((estudiante:Estudiante)=>estudiante.dni===dni);
+ 
+            if(!estudianteEncontrado)
+            return {
+             success:false,
+             message:"No puedes eliminar el expediente de otro estudiante"
+             }
+         }
+
+         let expediente= Expediente.CreateExpedienteEstudiante({tipo,escuela, facultad, numeroExpediente, asesor, estudiantes, fechaSustentacion, jurados}, usuarioModficiacion);
+
+            if(tipo===1){
+                if(!numeroExpediente || !asesor || !jurados || !fechaSustentacion){
+                    return {
+                        success:false,
+                        message:"Ingrese todos los datos necesarios del expediente de tipo pilar "
+                    }
+                }
+    
+               const expedientesEncontrados= await this.findByTerm("tipo",1, idExpediente, facultad);
+    
+               const dniEstudiantes= estudiantes.map(({dni})=>dni);
+    
+               const estudianteRepetido = expedientesEncontrados.flatMap(({estudiantes})=>estudiantes).filter(({dni})=>dniEstudiantes.includes(dni) );
+    
+               if(estudianteRepetido.length>0){
+                return {
+                    success:false,
+                    message:"Ya se registro un expediente de este tipo para esta facultad con su dni"
+                }
+               }
+    
+               const expedienteEncontradoByNumeroExpediente= await this.findOneByTerm("numeroExpediente", numeroExpediente, idExpediente);
+    
+               if(expedienteEncontradoByNumeroExpediente){
+                return {
+                    success:false,
+                    message:"Este numero de expediente ya existe"
+                }
+               }
+            }
+    
+            if(tipo===2 || tipo===3){ 
+                expediente= Expediente.UpdateExpedienteEncargado(tipo,escuela, facultad, estudiantes, usuarioModficiacion);
+    
+                const expedientesEncontrados= await this.findByTerm("tipo",tipo, idExpediente, facultad);
+    
+               const dniEstudiantes= estudiantes.map(({dni})=>dni);
+    
+               const estudianteRepetido = expedientesEncontrados.flatMap(({estudiantes})=>estudiantes).filter(({dni})=>dniEstudiantes.includes(dni) );
+    
+               if(estudianteRepetido.length>0){
+                return {
+                    success:false,
+                    message:"Ya se registro un expediente de este tipo para esta facultad con su dni"
+                }
+               }
+            }
+
+           
+            const expedienteActualizado = await this.expedienteService.updateExpediente(idExpediente,expediente);
+
+            if(!expedienteActualizado)
+                    return {
+                        success:false,
+                        message:"El expediente no se pudo registrar correctamente"
+                    }
+    
+            return {
+                success:true,
+                message:"El expediente se creo correctamente"
+            }
+            
+
+
+
+    }
    
     async deleteExpediente(idExpediente:string,esEstudiante:boolean, dni:string, idUsuario:string){
         const {success, message, value}= await this.getExpedienteById(idExpediente);
@@ -193,7 +292,7 @@ export class ExpedienteUseCase{
         if(value?.['esValido']){
             return {
                 success: false,
-                message: "No puede eliminar un expediente que es valido"
+                message: "No puede eliminar un expediente que fue validado"
             }
         }
 

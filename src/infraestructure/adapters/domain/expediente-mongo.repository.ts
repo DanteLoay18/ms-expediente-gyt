@@ -11,7 +11,7 @@ export class MongoExpedienteRepository implements ExpedienteRepository {
     constructor(@InjectModel(Expediente.name) private expedienteRepository: Model<Expediente>) { }
     
     findAll(): Promise<Expediente[]> {
-        return this.expedienteRepository.find();
+        return this.expedienteRepository.find({esEliminado:false});
     }
 
     findByTerm(termino:string, valor:string | number):Promise<Expediente[]>{

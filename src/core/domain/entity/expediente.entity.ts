@@ -47,6 +47,32 @@ export class Expediente extends Base{
         return expediente;
     }
 
+    static UpdateExpedienteEstudiante({tipo, numeroExpediente, escuela, facultad,estudiantes,jurados,asesor,fechaSustentacion}:CreateExpedienteDto, usuarioModificacion:string){
+        const expediente= new Expediente();
+        expediente.tipo=tipo;
+        expediente.numeroExpediente=numeroExpediente;      
+        expediente.escuela=escuela;
+        expediente.facultad=facultad;
+        expediente.estudiantes=estudiantes;
+        expediente.jurados=jurados;
+        expediente.asesor=asesor;
+        expediente.fechaSustentacion=fechaSustentacion;
+        expediente.fechaModificacion=new Date();
+        expediente.usuarioModificacion=usuarioModificacion;
+        return expediente;
+    }
+
+    static UpdateExpedienteEncargado(tipo:number, escuela:string, facultad:string, estudiantes:Estudiante[], usuarioModificacion:string){
+        const expediente= new Expediente();
+        expediente.tipo=tipo;
+        expediente.escuela=escuela;
+        expediente.facultad=facultad;
+        expediente.estudiantes=estudiantes;
+        expediente.fechaModificacion=new Date();
+        expediente.usuarioModificacion=usuarioModificacion;
+        return expediente;
+    }
+
     static EliminarExpediente(usuarioModificacion:string){
         const expediente= new Expediente();
 
