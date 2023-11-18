@@ -33,7 +33,7 @@ export class ExpedienteUseCase{
     }
 
    
-    async getAllExpedientes(page:number, pageSize:number, dni:string, esEstudiante:boolean, idEscuela:string){
+    async getAllExpedientes(page:number, pageSize:number, dni:string, esEstudiante:boolean, idFacultad:string){
         try{
             let expedientes= await this.expedienteService.findAll();
             
@@ -41,7 +41,7 @@ export class ExpedienteUseCase{
             expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.some((estudiante)=>estudiante.dni===dni)});
 
             if(!esEstudiante)
-            expedientes= expedientes.filter((expediente)=> expediente.escuela===idEscuela)
+            expedientes= expedientes.filter((expediente)=> expediente.facultad===idFacultad)
 
             const startIndex = (page - 1 )*pageSize;
             const endIndex = startIndex + pageSize;
@@ -70,7 +70,7 @@ export class ExpedienteUseCase{
 
     
 
-    async getExpedientesByBusqueda({esEstudiante,dni,idEscuelaUsuario,...findExpedienteByBusquedaDto}:FindExpedienteByBusquedaDto){
+    async getExpedientesByBusqueda({esEstudiante,dni,idFacultadUsuario,...findExpedienteByBusquedaDto}:FindExpedienteByBusquedaDto){
         try{
             let expedientes= await this.expedienteService.findAll();
             
@@ -78,7 +78,7 @@ export class ExpedienteUseCase{
             expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.some((estudiante)=>estudiante.dni===dni)});
 
             if(!esEstudiante)
-            expedientes= expedientes.filter((expediente)=> expediente.escuela===idEscuelaUsuario);
+            expedientes= expedientes.filter((expediente)=> expediente.facultad===idFacultadUsuario);
 
             expedientes= expedientes.filter(expediente => {
                 const tipoConincide = !findExpedienteByBusquedaDto.tipo || expediente.tipo === findExpedienteByBusquedaDto.tipo;

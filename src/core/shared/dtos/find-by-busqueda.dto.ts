@@ -8,7 +8,7 @@ export interface FindExpedienteByBusquedaDto{
     page:number;
     pageSize:number;
 
-    idEscuelaUsuario:string;
+    idFacultadUsuario:string;
     esEstudiante:boolean;
     dni:string;
 

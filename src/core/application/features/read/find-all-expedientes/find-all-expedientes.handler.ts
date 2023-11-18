@@ -9,7 +9,7 @@ export class FindAllExpedientesHandler implements IQueryHandler<FindAllExpedient
 
     execute(query: FindAllExpedientesQuery) {
         
-        return this.expedienteUseCases.getAllExpedientes(query.page, query.pageSize,query.dni, query.esEstudiante, query.idEscuela);
+        return this.expedienteUseCases.getAllExpedientes(query.page, query.pageSize,query.dni, query.esEstudiante, query.idFacultad);
     }
 
 }
