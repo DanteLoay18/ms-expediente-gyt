@@ -4,10 +4,11 @@ import { MessagePattern } from '@nestjs/microservices';
 import { FindAllExpedientesRequest } from '../model/find-all-expedientes.request';
 import { FindAllExpedientesQuery, FindByIdQuery, FindExpedienteByBusquedaQuery } from 'src/core/application/features/read';
 import { CreateExpedienteRequest } from '../model/create-expediente.request';
-import { CreateExpedienteCommand, EliminarExpedienteCommand, UpdateExpedienteCommand } from 'src/core/application/features/write';
+import { CreateExpedienteCommand, EliminarExpedienteCommand, UpdateExpedienteCommand, ValidarExpedienteCommand } from 'src/core/application/features/write';
 import { FindByBusquedaExpedienteRequest } from '../model/find-by-busqueda-expediente.request';
 import { EliminarExpedienteRequest } from '../model/eliminar-expediente.request';
 import { UpdateExpedienteRequest } from '../model/update-expediente.request';
+import { ValidarExpedienteRequest } from '../model/validar-expediente.request';
 @Controller()
 export class ExpedienteController{
 
@@ -51,6 +52,13 @@ export class ExpedienteController{
     async updateExpediente({idUsuario,dni,esEstudiante, ...updateExpdienteDto}:UpdateExpedienteRequest) {
 
         return await this.command.execute(new UpdateExpedienteCommand(updateExpdienteDto,esEstudiante, dni, idUsuario));
+        
+    }
+
+    @MessagePattern({cmd: 'validar_expediente'})
+    async validarExpediente({idUsuario,idExpediente}:ValidarExpedienteRequest) {
+
+        return await this.command.execute(new ValidarExpedienteCommand(idExpediente, idUsuario));
         
     }
 

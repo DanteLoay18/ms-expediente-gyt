@@ -7,7 +7,7 @@ import { ExpedienteService } from './domain/services/expediente.service';
 import { ExpedienteRepository } from './domain/ports/outbound/expediente.repository';
 import { ExpedienteUseCase } from './application/services/expediente.use-case';
 import { FindAllExpedientesHandler, FindAllExpedientesQuery, FindByIdHandler, FindByIdQuery, FindExpedienteByBusquedaHandler, FindExpedienteByBusquedaQuery } from './application/features/read';
-import { CreateExpedienteCommand, CreateExpedienteHandler, EliminarExpedienteCommand, EliminarExpedienteHandler, UpdateExpedienteCommand, UpdateExpedienteHandler } from './application/features/write';
+import { CreateExpedienteCommand, CreateExpedienteHandler, EliminarExpedienteCommand, EliminarExpedienteHandler, UpdateExpedienteCommand, UpdateExpedienteHandler, ValidarExpedienteCommand, ValidarExpedienteHandler } from './application/features/write';
 
 
 const EXPEDIENTE_PROVIDERS=[
@@ -21,6 +21,8 @@ const EXPEDIENTE_PROVIDERS=[
     CreateExpedienteHandler,
     UpdateExpedienteCommand,
     UpdateExpedienteHandler,
+    ValidarExpedienteCommand,
+    ValidarExpedienteHandler,
     EliminarExpedienteCommand,
     EliminarExpedienteHandler
 ]

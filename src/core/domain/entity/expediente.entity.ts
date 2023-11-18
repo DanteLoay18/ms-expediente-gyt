@@ -73,6 +73,15 @@ export class Expediente extends Base{
         return expediente;
     }
 
+    static ValidarExpediente(usuarioModificacion:string){
+        const expediente= new Expediente();
+
+        expediente.esValido=true;
+        expediente.fechaModificacion=new Date();
+        expediente.usuarioModificacion=usuarioModificacion;
+        return expediente;
+    }
+
     static EliminarExpediente(usuarioModificacion:string){
         const expediente= new Expediente();
 

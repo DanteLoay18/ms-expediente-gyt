@@ -278,6 +278,41 @@ export class ExpedienteUseCase{
 
 
     }
+
+    async valdiarExpediente(idExpediente:string, idUsuario:string){
+        const {success, message, value}= await this.getExpedienteById(idExpediente);
+
+        if(!success){
+            return {
+                success,
+                message
+            }
+        }
+
+        if(value?.['esValido']){
+            return {
+                success: false,
+                message: "El expediente ya es valido"
+            }
+        }
+
+        const expediente = Expediente.ValidarExpediente(idUsuario);
+
+        const expedienteValidado = await this.expedienteService.updateExpediente(idExpediente, expediente);
+
+        if(!expedienteValidado){
+            return {
+                success:false,
+                message:"Hubo un error al validar el expediente"
+            }
+        }
+
+        return {
+            success:true,
+            message:"El expediente se valido correctamente"
+        }
+
+    }
    
     async deleteExpediente(idExpediente:string,esEstudiante:boolean, dni:string, idUsuario:string){
         const {success, message, value}= await this.getExpedienteById(idExpediente);
