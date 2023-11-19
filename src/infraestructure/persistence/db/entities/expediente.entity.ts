@@ -19,6 +19,9 @@ export class Expediente extends Base{
     @Prop({type: String})
     facultad:string;
 
+    @Prop({type: String})
+    tituloProyecto?:string;
+
     @Prop({type: Boolean})
     esValido:boolean;
 

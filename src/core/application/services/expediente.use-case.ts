@@ -183,7 +183,7 @@ export class ExpedienteUseCase{
         }
     }
 
-    async updateExpediente({idExpediente,tipo,escuela, facultad, numeroExpediente, asesor,estudiantes,fechaSustentacion,jurados }:UpdateExpedienteDto,esEstudiante:boolean, dni:string, usuarioModficiacion:string ){
+    async updateExpediente({idExpediente,tipo,escuela, facultad, numeroExpediente, tituloProyecto, asesor,estudiantes,fechaSustentacion,jurados }:UpdateExpedienteDto,esEstudiante:boolean, dni:string, usuarioModficiacion:string ){
         const {success, message, value}= await this.getExpedienteById(idExpediente);
 
         if(!success){
@@ -210,10 +210,10 @@ export class ExpedienteUseCase{
              }
          }
 
-         let expediente= Expediente.CreateExpedienteEstudiante({tipo,escuela, facultad, numeroExpediente, asesor, estudiantes, fechaSustentacion, jurados}, usuarioModficiacion);
+         let expediente= Expediente.CreateExpedienteEstudiante({tipo,escuela, facultad,tituloProyecto, numeroExpediente, asesor, estudiantes, fechaSustentacion, jurados}, usuarioModficiacion);
 
             if(tipo===1){
-                if(!numeroExpediente || !asesor || !jurados || !fechaSustentacion){
+                if(!numeroExpediente || !asesor || !jurados || !fechaSustentacion || !tituloProyecto){
                     return {
                         success:false,
                         message:"Ingrese todos los datos necesarios del expediente de tipo pilar "

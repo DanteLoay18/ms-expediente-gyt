@@ -8,18 +8,20 @@ export class Expediente extends Base{
     escuela:string;
     facultad:string;
     esValido:boolean;
+    tituloProyecto?:string;
     estudiantes?: Estudiante[];
     jurados?: Jurado[];
     asesor ?:string;
     fechaSustentacion?:Date;
 
 
-    static CreateExpedienteEstudiante({tipo, numeroExpediente, escuela, facultad,estudiantes,jurados,asesor,fechaSustentacion}:CreateExpedienteDto, usuarioCreacion:string){
+    static CreateExpedienteEstudiante({tipo, numeroExpediente, escuela,tituloProyecto, facultad,estudiantes,jurados,asesor,fechaSustentacion}:CreateExpedienteDto, usuarioCreacion:string){
         const expediente= new Expediente();
         expediente.tipo=tipo;
         expediente.numeroExpediente=numeroExpediente;      
         expediente.escuela=escuela;
         expediente.facultad=facultad;
+        expediente.tituloProyecto=tituloProyecto;
         expediente.estudiantes=estudiantes;
         expediente.jurados=jurados;
         expediente.asesor=asesor;
@@ -47,13 +49,14 @@ export class Expediente extends Base{
         return expediente;
     }
 
-    static UpdateExpedienteEstudiante({tipo, numeroExpediente, escuela, facultad,estudiantes,jurados,asesor,fechaSustentacion}:CreateExpedienteDto, usuarioModificacion:string){
+    static UpdateExpedienteEstudiante({tipo, numeroExpediente,tituloProyecto, escuela, facultad,estudiantes,jurados,asesor,fechaSustentacion}:CreateExpedienteDto, usuarioModificacion:string){
         const expediente= new Expediente();
         expediente.tipo=tipo;
         expediente.numeroExpediente=numeroExpediente;      
         expediente.escuela=escuela;
         expediente.facultad=facultad;
         expediente.estudiantes=estudiantes;
+        expediente.tituloProyecto=tituloProyecto;
         expediente.jurados=jurados;
         expediente.asesor=asesor;
         expediente.fechaSustentacion=fechaSustentacion;

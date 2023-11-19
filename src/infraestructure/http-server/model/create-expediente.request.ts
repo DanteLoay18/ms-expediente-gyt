@@ -7,6 +7,7 @@ export class CreateExpedienteRequest{
     escuela:string;
     facultad:string;
     esValido:boolean;
+    tituloProyecto:string;
     estudiantes?: Estudiante[];
     jurados?: Jurado[];
     asesor ?:string;

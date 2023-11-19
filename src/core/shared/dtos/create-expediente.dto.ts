@@ -5,6 +5,7 @@ export class CreateExpedienteDto{
     numeroExpediente:string;
     escuela:string;
     facultad:string;
+    tituloProyecto?:string;
     estudiantes?: Estudiante[];
     jurados?: Jurado[];
     asesor ?:string;
