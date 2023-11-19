@@ -5,6 +5,7 @@ import { CreateExpedienteDto, Estudiante } from "src/core/shared/dtos/create-exp
 import { Expediente } from "src/core/domain/entity/expediente.entity";
 import { FindExpedienteByBusquedaDto } from "src/core/shared/dtos/find-by-busqueda.dto";
 import { UpdateExpedienteDto } from "src/core/shared/dtos/update-expediente.dto";
+
 @Injectable()
 export class ExpedienteUseCase{
     constructor(private readonly expedienteService:ExpedienteService){}
@@ -386,16 +387,28 @@ export class ExpedienteUseCase{
 
     async generarNumeroExpediente() {
         const expedientes = await this.expedienteService.findUltimoExpediente();
-
+        
         expedientes.sort((a, b) => {
-            return Number(b.numeroExpediente) - Number(a.numeroExpediente);
+            const numeroA = Number(a.numeroExpediente.match(/\d+$/)[0]);
+            const numeroB = Number(b.numeroExpediente.match(/\d+$/)[0]);
+
+            return numeroB - numeroA;
+
         });
 
-        const nuevoNumeroExpediente = expedientes[0]
-          ? String(Number(expedientes[0].numeroExpediente) + 1)
-          : '1';
-    
-        return nuevoNumeroExpediente;
+        const nuevoNumeroExpediente =
+                        expedientes[0] ? Number(expedientes[0].numeroExpediente.match(/\d+$/)[0]) + 1 : 1;
+
+        // Obtener el año actual
+        const year = new Date().getFullYear();
+
+        // Formatear el número de expediente con ceros a la izquierda
+        const numeroFormateado = String(nuevoNumeroExpediente).padStart(3, '0');
+
+        // Construir el número de expediente con el formato deseado
+        const expedienteFormato = `SGYT-${year}-${numeroFormateado}`;
+
+        return expedienteFormato;
       }
 
 
