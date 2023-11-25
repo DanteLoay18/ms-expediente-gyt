@@ -106,8 +106,8 @@ export class ExpedienteUseCase{
     }
 
 
-    async createExpediente({tipo,escuela, facultad, numeroExpediente, asesor,estudiantes,fechaSustentacion,jurados}:CreateExpedienteDto,esEstudiante:boolean, dni:string, usuarioCreacion:string){
-        let expediente= Expediente.CreateExpedienteEstudiante({tipo,escuela, facultad, numeroExpediente, asesor, estudiantes, fechaSustentacion, jurados}, usuarioCreacion);
+    async createExpediente({tipo,escuela, facultad, numeroExpediente,tituloProyecto, asesor,estudiantes,fechaSustentacion,jurados}:CreateExpedienteDto,esEstudiante:boolean, dni:string, usuarioCreacion:string){
+        let expediente= Expediente.CreateExpedienteEstudiante({tipo,escuela, facultad, numeroExpediente, tituloProyecto, asesor, estudiantes, fechaSustentacion, jurados}, usuarioCreacion);
         
         if(esEstudiante){
             const estudianteEncontrado= estudiantes.find((estudiante)=>estudiante.dni===dni);

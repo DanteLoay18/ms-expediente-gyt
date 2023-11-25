@@ -42,8 +42,8 @@ export class ExpedienteController{
     
 
     @MessagePattern({cmd: 'create_expediente'})
-    async createDocente({idUsuario,esEstudiante,dni, ...createExpedienteDto}:CreateExpedienteRequest) {
-
+    async createExpediente({idUsuario,esEstudiante,dni, ...createExpedienteDto}:CreateExpedienteRequest) {
+        console.log(createExpedienteDto)
         return await this.command.execute(new CreateExpedienteCommand(createExpedienteDto,esEstudiante,dni, idUsuario));
         
     }
