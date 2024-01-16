@@ -37,7 +37,9 @@ export class ExpedienteUseCase{
     async getAllExpedientes(page:number, pageSize:number, dni:string, esEstudiante:boolean, idFacultad:string){
         try{
             let expedientes= await this.expedienteService.findAll();
-            
+
+            expedientes = expedientes.sort((a, b) => (a.esValido === b.esValido) ? 0 : a.esValido ? 1 : -1);
+
             if(esEstudiante)
             expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.some((estudiante)=>estudiante.dni===dni)});
 
@@ -75,6 +77,8 @@ export class ExpedienteUseCase{
         try{
             let expedientes= await this.expedienteService.findAll();
             
+            expedientes = expedientes.sort((a, b) => (a.esValido === b.esValido) ? 0 : a.esValido ? 1 : -1);
+
             if(esEstudiante)
             expedientes= expedientes.filter((expediente)=>{return expediente.estudiantes.some((estudiante)=>estudiante.dni===dni)});
 
@@ -127,7 +131,7 @@ export class ExpedienteUseCase{
                 }
             }
 
-           const expedientesEncontrados= await this.findByTerm("tipo",1, "", facultad);
+           const expedientesEncontrados= await this.findByTerm("tipo",1, "", escuela);
 
            const dniEstudiantes= estudiantes.map(({dni})=>dni);
 
@@ -136,7 +140,7 @@ export class ExpedienteUseCase{
            if(estudianteRepetido.length>0){
             return {
                 success:false,
-                message:"Ya se registro un expediente de este tipo para esta facultad con su dni"
+                message:"Ya se registro un expediente de este tipo para esta escuela con su dni"
             }
            }
 
@@ -153,7 +157,7 @@ export class ExpedienteUseCase{
         if(tipo===2 || tipo===3){ 
             expediente= Expediente.CreateExpedienteEncargado(tipo,await this.generarNumeroExpediente(), escuela, facultad, estudiantes, usuarioCreacion);
 
-            const expedientesEncontrados= await this.findByTerm("tipo",tipo, "", facultad);
+            const expedientesEncontrados= await this.findByTerm("tipo",tipo, "", escuela);
 
            const dniEstudiantes= estudiantes.map(({dni})=>dni);
 
@@ -162,7 +166,7 @@ export class ExpedienteUseCase{
            if(estudianteRepetido.length>0){
             return {
                 success:false,
-                message:"Ya se registro un expediente de este tipo para esta facultad con su dni"
+                message:"Ya se registro un expediente de este tipo para esta escuela con su dni"
             }
            }
         }
@@ -221,7 +225,7 @@ export class ExpedienteUseCase{
                     }
                 }
     
-               const expedientesEncontrados= await this.findByTerm("tipo",1, idExpediente, facultad);
+               const expedientesEncontrados= await this.findByTerm("tipo",1, idExpediente, escuela);
     
                const dniEstudiantes= estudiantes.map(({dni})=>dni);
     
@@ -230,7 +234,7 @@ export class ExpedienteUseCase{
                if(estudianteRepetido.length>0){
                 return {
                     success:false,
-                    message:"Ya se registro un expediente de este tipo para esta facultad con su dni"
+                    message:"Ya se registro un expediente de este tipo para esta escuela con su dni"
                 }
                }
     
@@ -247,7 +251,7 @@ export class ExpedienteUseCase{
             if(tipo===2 || tipo===3){ 
                 expediente= Expediente.UpdateExpedienteEncargado(tipo,escuela, facultad, estudiantes, usuarioModficiacion);
     
-                const expedientesEncontrados= await this.findByTerm("tipo",tipo, idExpediente, facultad);
+                const expedientesEncontrados= await this.findByTerm("tipo",tipo, idExpediente, escuela);
     
                const dniEstudiantes= estudiantes.map(({dni})=>dni);
     
@@ -256,7 +260,7 @@ export class ExpedienteUseCase{
                if(estudianteRepetido.length>0){
                 return {
                     success:false,
-                    message:"Ya se registro un expediente de este tipo para esta facultad con su dni"
+                    message:"Ya se registro un expediente de este tipo para esta escuela con su dni"
                 }
                }
             }
@@ -377,9 +381,9 @@ export class ExpedienteUseCase{
        
     }
 
-    async findByTerm(term:string, valor:string | number, idExpediente:string, idFacultad:string){
+    async findByTerm(term:string, valor:string | number, idExpediente:string, idEscuela:string){
         let expedientes= await this.expedienteService.findByterm(term, valor);
-        const expedientesEncontradoPorFacultad= expedientes.filter((expediente)=>expediente.facultad===idFacultad && expediente._id!==idExpediente);
+        const expedientesEncontradoPorFacultad= expedientes.filter((expediente)=>expediente.escuela===idEscuela && expediente._id!==idExpediente);
       
         return expedientesEncontradoPorFacultad;
        
